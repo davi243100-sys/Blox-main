@@ -27,6 +27,23 @@ header h1 { color:#4da3ff; margin:0; }
   border-radius:10px;
   margin-top:20px;
 }
+.produto-img {
+  width:100%;
+  border-radius:8px;
+  margin-bottom:10px;
+}
+.badges {
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-bottom:10px;
+}
+.badge {
+  background:#1e90ff;
+  padding:6px 10px;
+  border-radius:20px;
+  font-size:12px;
+}
 label { margin-top:10px; display:block; }
 input, textarea, button {
   width:100%;
@@ -65,9 +82,22 @@ hr { border:1px solid #1e90ff; margin:20px 0; }
   <p>Contas Blox Fruits • Entrega segura</p>
 </header>
 
-<!-- ====== LOJA ====== -->
+<!-- ===== PRODUTO ===== -->
 <div class="card" id="loja">
-  <h2>Conta Blox Fruits</h2>
+  <img src="images/bloxfruits.jpg" class="produto-img" alt="Blox Fruits">
+
+  <h2>Conta Blox Fruits FULL</h2>
+
+  <div class="badges">
+    <div class="badge">🐯 Tiger</div>
+    <div class="badge">🥋 God Human</div>
+    <div class="badge">⭐ Level Máx</div>
+  </div>
+
+  <p>
+    Conta pronta para PvP e Farm.<br>
+    Entrega segura após confirmação do Pix.
+  </p>
 
   <label>Nome completo (igual ao banco)</label>
   <input id="nome">
@@ -85,14 +115,14 @@ hr { border:1px solid #1e90ff; margin:20px 0; }
   <div class="status" id="status"></div>
 </div>
 
-<!-- ====== ENTREGA CLIENTE ====== -->
+<!-- ===== ENTREGA CLIENTE ===== -->
 <div class="card hidden" id="entregaCliente">
   <h2>🎉 Pedido entregue</h2>
   <p><strong>Login:</strong> <span id="loginCli"></span></p>
   <p><strong>Senha:</strong> <span id="senhaCli"></span></p>
 </div>
 
-<!-- ====== PAINEL ====== -->
+<!-- ===== PAINEL ===== -->
 <div class="card">
   <h2>Painel do vendedor</h2>
 
@@ -102,7 +132,6 @@ hr { border:1px solid #1e90ff; margin:20px 0; }
 
   <div id="painel" class="hidden">
     <hr>
-    <p><strong>Pedido:</strong></p>
     <p id="infoPedido"></p>
 
     <label>Login da conta</label>
@@ -142,21 +171,14 @@ function finalizarPedido(){
   const nome = document.getElementById("nome").value.trim();
   if(!nome){ alert("Preencha o nome."); return; }
 
-  const pedido = {
-    nome,
-    valor: valorAtual,
-    entregue:false
-  };
-
-  localStorage.setItem("pedido", JSON.stringify(pedido));
+  localStorage.setItem("pedido", JSON.stringify({nome, valor:valorAtual}));
   document.getElementById("status").innerText =
     "⏳ Pedido registrado. Aguarde confirmação.";
 }
 
 function abrirPainel(){
   if(document.getElementById("senhaPainel").value !== "admin123"){
-    alert("Senha incorreta");
-    return;
+    alert("Senha incorreta"); return;
   }
 
   const pedido = JSON.parse(localStorage.getItem("pedido"));
@@ -172,8 +194,6 @@ function enviarConta(){
   const senha = document.getElementById("senhaConta").value;
 
   if(!login || !senha){ alert("Preencha login e senha"); return; }
-
-  localStorage.setItem("entrega", JSON.stringify({login, senha}));
 
   document.getElementById("loginCli").innerText = login;
   document.getElementById("senhaCli").innerText = senha;
